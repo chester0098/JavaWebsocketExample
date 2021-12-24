@@ -18,11 +18,12 @@ import java.text.DecimalFormat
 class CryptoResponseAdapter() : RecyclerView.Adapter<CryptoViewHolder>() {
 
     private val cryptoMap = HashMap<String, OrderBook>()
+    private val newList = mutableListOf<Pair<String, OrderBook>>()
     private var actualCryptoList: MutableList<Pair<String, OrderBook>> = mutableListOf()
 
-    fun myRVAdapter(mData: HashMap<String, OrderBook>) {
+    fun setNewCryptoHashMap(mData: HashMap<String, OrderBook>) {
         cryptoMap.putAll(mData)
-        val newList = mutableListOf<Pair<String, OrderBook>>()
+        newList.clear()
         cryptoMap.forEach { (s, s2) ->
             newList.add(Pair(s, s2))
         }
@@ -59,14 +60,14 @@ class CryptoResponseAdapter() : RecyclerView.Adapter<CryptoViewHolder>() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun changePercentColorAndText(textView: TextView, percent: Double?) {
+    private fun changePercentColorAndText(percentTextView: TextView, percent: Double?) {
         if (percent != null) {
             if (percent > 0) {
-                textView.text = "+${roundOffDecimal(percent)}"
-                textView.setTextColor(Color.GREEN)
+                percentTextView.text = "+${roundOffDecimal(percent)}"
+                percentTextView.setTextColor(Color.GREEN)
             } else {
-                textView.text = roundOffDecimal(percent)
-                textView.setTextColor(Color.RED)
+                percentTextView.text = roundOffDecimal(percent)
+                percentTextView.setTextColor(Color.RED)
             }
         }
     }
@@ -78,7 +79,7 @@ class CryptoResponseAdapter() : RecyclerView.Adapter<CryptoViewHolder>() {
     }
 
     private fun swap(newCryptoList: List<Pair<String, OrderBook>>) {
-        val diffCallback = ActorDiffCallback(actualCryptoList, newCryptoList)
+        val diffCallback = CryptoDiffCallback(actualCryptoList, newCryptoList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
         actualCryptoList.clear()
@@ -86,7 +87,7 @@ class CryptoResponseAdapter() : RecyclerView.Adapter<CryptoViewHolder>() {
         diffResult.dispatchUpdatesTo(this)
     }
 
-    inner class ActorDiffCallback(
+    inner class CryptoDiffCallback(
         private val oldList: List<Pair<String, OrderBook>>,
         private val newList: List<Pair<String, OrderBook>>
     ) : DiffUtil.Callback() {

@@ -1,13 +1,9 @@
 package com.evgfad.javawebsocketexample.ui
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.lifecycleScope
-import com.evgfad.javawebsocketexample.R
 import com.evgfad.javawebsocketexample.databinding.ActivityMainBinding
 import com.evgfad.javawebsocketexample.model.crypro_request.CryptoRequest
 import com.evgfad.javawebsocketexample.model.crypto_response.CryptoResponse
@@ -63,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                     if (cryptoResponse.data.isNullOrEmpty())
                         Log.d(TAG, "onMessage: NULL")
                     else
-                        cryptoResponseAdapter.myRVAdapter(cryptoResponse.data)
+                        cryptoResponseAdapter.setNewCryptoHashMap(cryptoResponse.data)
                 }
             }
 
